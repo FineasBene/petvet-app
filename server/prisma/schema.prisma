@@ -1,0 +1,186 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── PERMISSIONS ──────────────────────────────────────────────────────────────
+
+model Permission {
+  id    Int              @id @default(autoincrement())
+  name  String           @unique
+  roles RolePermission[]
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+  role         Role       @relation(fields: [roleId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+}
+
+// ─── USERS & ROLES ────────────────────────────────────────────────────────────
+
+model Role {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique // admin | owner | vet
+  users       User[]
+  permissions RolePermission[]
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  name           String
+  email          String          @unique
+  phone          String?
+  passwordHash   String
+  roleId         Int
+  role           Role            @relation(fields: [roleId], references: [id])
+  pets           Pet[]
+  actionLogs     ActionLog[]
+  suspicion      SuspiciousUser?
+  passwordResets PasswordReset[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([token])
+}
+
+// ─── LOGGING (Gold) ───────────────────────────────────────────────────────────
+
+model ActionLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  groupId   String
+  action    String
+  details   Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model FailedLogin {
+  id        Int      @id @default(autoincrement())
+  email     String
+  ipAddress String?
+  attemptAt DateTime @default(now())
+}
+
+model SuspiciousUser {
+  id         Int       @id @default(autoincrement())
+  userId     Int       @unique
+  user       User      @relation(fields: [userId], references: [id])
+  reason     String    @db.Text
+  flaggedAt  DateTime  @default(now())
+  resolved   Boolean   @default(false)
+  resolvedAt DateTime?
+}
+
+// ─── SPECIES & BREEDS ─────────────────────────────────────────────────────────
+
+model Species {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  breeds Breed[]
+  pets   Pet[]
+}
+
+model Breed {
+  id        Int     @id @default(autoincrement())
+  name      String
+  speciesId Int
+  species   Species @relation(fields: [speciesId], references: [id])
+  pets      Pet[]
+
+  @@unique([name, speciesId])
+}
+
+// ─── PETS ─────────────────────────────────────────────────────────────────────
+
+model Pet {
+  id           Int           @id @default(autoincrement())
+  name         String
+  speciesId    Int
+  species      Species       @relation(fields: [speciesId], references: [id])
+  breedId      Int?
+  breed        Breed?        @relation(fields: [breedId], references: [id])
+  age          Float
+  weight       Float
+  gender       String
+  chipId       String?
+  notes        String?       @db.Text
+  vaccinated   Boolean       @default(false)
+  lastVetVisit DateTime?
+  ownerId      Int
+  owner        User          @relation(fields: [ownerId], references: [id])
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([ownerId])
+  @@index([speciesId])
+}
+
+// ─── SERVICES ─────────────────────────────────────────────────────────────────
+
+model ServiceCategory {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique // medical | grooming | boarding | walking
+  services Service[]
+}
+
+model Service {
+  id           Int             @id @default(autoincrement())
+  name         String
+  categoryId   Int
+  category     ServiceCategory @relation(fields: [categoryId], references: [id])
+  appointments Appointment[]
+
+  @@unique([name, categoryId])
+}
+
+// ─── APPOINTMENT STATUS ───────────────────────────────────────────────────────
+
+model AppointmentStatus {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  appointments Appointment[]
+}
+
+// ─── APPOINTMENTS ─────────────────────────────────────────────────────────────
+
+model Appointment {
+  id         Int               @id @default(autoincrement())
+  petId      Int
+  pet        Pet               @relation(fields: [petId], references: [id], onDelete: Cascade)
+  serviceId  Int
+  service    Service           @relation(fields: [serviceId], references: [id])
+  date       DateTime
+  time       String
+  provider   String
+  location   String
+  statusId   Int
+  status     AppointmentStatus @relation(fields: [statusId], references: [id])
+  notes      String?           @db.Text
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  @@index([petId])
+  @@index([serviceId])
+  @@index([date])
+}

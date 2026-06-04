@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Lora:wght@600;700&display=swap');
+
+/* --- ACESTEA SUNT REPARATIILE PENTRU BROWSER SI VITE --- */
+:root { color-scheme: light; }
+#root { max-width: 100% !important; padding: 0 !important; margin: 0 !important; width: 100%; text-align: left !important; }
+input, select, textarea { background-color: #ffffff !important; color: #1A2332 !important; }
+h1, h2, h3, h4, h5, h6, p, span { color: #1A2332; }
+/* ------------------------------------------------------- */
+
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:#F7FAFA;color:#1A2332}
+
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes sr{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes tin{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes tout{to{opacity:0;transform:translateX(30px)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+.fu{animation:fu .5s ease both}.fi{animation:fi .4s ease both}.sr{animation:sr .5s ease both}.pop{animation:pop .35s ease both}
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}.d5{animation-delay:.3s}
+
+.b{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none}
+.b:active{transform:scale(.97)}
+.bp{background:#0D9488;color:#fff}.bp:hover{background:#0F766E;box-shadow:0 6px 20px #0D948840}
+.bo{background:#fff;color:#0D9488;border:1.5px solid #0D9488}.bo:hover{background:#0D9488;color:#fff}
+.bd{background:#EF4444;color:#fff}.bd:hover{background:#DC2626}
+.bg{background:transparent;color:#64748B;border:none}.bg:hover{background:#f1f5f9;color:#1A2332}
+.bs{padding:5px 13px;font-size:13px;border-radius:9px}
+
+.ig{display:flex;flex-direction:column;gap:4px}.ig label{font-size:12px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.3px}
+.ig input,.ig select,.ig textarea{padding:9px 13px;border:1.5px solid #E2E8F0;border-radius:11px;font-family:inherit;font-size:14px;transition:all .2s;background:#fff;color:#1A2332}
+.ig input:focus,.ig select:focus,.ig textarea:focus{outline:none;border-color:#0D9488;box-shadow:0 0 0 3px #0D948815}
+.ie input,.ie select{border-color:#EF4444!important}.er{font-size:11px;color:#EF4444;font-weight:600}
+
+.c{background:#FFFFFF;border-radius:16px;border:1px solid #E2E8F0;box-shadow:0 1px 3px rgba(0,0,0,.03);transition:all .25s}
+.c:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+
+.tw{position:fixed;top:16px;right:16px;z-index:10000;display:flex;flex-direction:column;gap:8px}
+.tt{padding:12px 20px;border-radius:12px;color:#fff;font-size:14px;font-weight:600;animation:tin .3s ease,tout .3s ease 2.6s forwards;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+
+@media(max-width:1024px){.dg{grid-template-columns:1fr!important}.strow{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:768px){.strow{grid-template-columns:1fr!important}.nl{display:none!important}.mb{display:flex!important}.hw{flex-direction:column!important;text-align:center!important}.hw h1{font-size:30px!important}.sg{grid-template-columns:1fr!important}.fg{grid-template-columns:1fr!important}.sbs{flex-direction:column!important}.mi{width:95%!important;margin:8px!important;max-height:95vh!important}.tw{right:8px;left:8px}.spg{grid-template-columns:1fr!important}}
+@media(max-width:480px){.hw h1{font-size:24px!important}.b{padding:7px 14px;font-size:13px}}
+
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
